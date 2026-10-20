@@ -7,9 +7,9 @@ import android.graphics.drawable.GradientDrawable;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.*;
-import androidx.appcompat.app.AppCompatActivity;
+import android.app.Activity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity {
     final int bg = Color.rgb(15, 23, 42);
     final int panel = Color.rgb(30, 41, 59);
     final int accent = Color.rgb(45, 212, 191);
