@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#17212b">
+<title>Leno</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#0e1621;color:#fff;font-family:Tahoma,Arial,sans-serif}
+header{height:65px;background:#17212b;display:flex;align-items:center;padding:0 18px;gap:13px}
+.logo{width:43px;height:43px;border-radius:50%;background:#6c5ce7;display:grid;place-items:center;font-size:25px;font-weight:bold}
+.brand{font-size:22px;font-weight:bold}
+.subtitle{font-size:11px;color:#8d9eaf;margin-top:5px}
+.search{padding:12px;background:#17212b}
+.search input{width:100%;padding:13px 16px;border:0;border-radius:12px;background:#242f3d;color:white;font-size:14px;outline:none}
+.tabs{display:flex;background:#17212b}
+.tabs button{flex:1;background:none;color:#8d9eaf;border:0;padding:14px 3px;font-size:13px}
+.tabs button.active{color:#8775f5;border-bottom:3px solid #8775f5}
+.chat{display:flex;align-items:center;padding:14px 15px;gap:12px;border-bottom:1px solid #1b2734;cursor:pointer}
+.avatar{width:52px;height:52px;flex-shrink:0;border-radius:50%;display:grid;place-items:center;background:#344b62;font-size:22px}
+.info{flex:1;min-width:0}
+.name{font-size:15px;margin-bottom:8px}
+.preview{font-size:12px;color:#91a1b2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.time{font-size:10px;color:#8e9eaf}
+.bottom{position:fixed;bottom:0;left:0;right:0;background:#17212b;display:flex;justify-content:space-around;padding:14px 0 max(14px,env(safe-area-inset-bottom))}
+.bottom button{background:none;border:0;color:#94a4b5;font-size:12px}
+.bottom button.active{color:#8775f5}
+#chatPage{display:none;position:fixed;inset:0;background:#0e1621;z-index:3;flex-direction:column}
+.chathead{display:flex;align-items:center;gap:12px;background:#17212b;padding:12px}
+.back{border:0;background:none;color:white;font-size:25px}
+#history{flex:1;padding:16px;overflow-y:auto;display:flex;flex-direction:column;gap:12px}
+.bubble{background:#24364a;padding:12px 14px;border-radius:14px 14px 3px 14px;align-self:flex-start;max-width:85%;overflow-wrap:anywhere}
+.composer{display:flex;gap:8px;padding:10px;background:#17212b}
+.composer input{flex:1;min-width:0;border:0;border-radius:22px;background:#263442;color:white;padding:13px;outline:none}
+.composer button{border:0;border-radius:50%;width:46px;background:#6c5ce7;color:white;font-size:19px}
+</style>
+</head>
+<body>
+<header><div class="logo">L</div><div><div class="brand">Leno</div><div class="subtitle">پیام‌رسان شخصی تو</div></div></header>
+<div class="search"><input id="search" placeholder="جست‌وجوی گفتگوها..." oninput="filterChats()"></div>
+<div class="tabs"><button class="active" onclick="setTab(this,'all')">همه</button><button onclick="setTab(this,'personal')">شخصی</button><button onclick="setTab(this,'groups')">گروه‌ها</button></div>
+<main id="chats">
+<div class="chat" data-type="personal" data-name="لنو" onclick="openChat('Leno','L')"><div class="avatar">✦</div><div class="info"><div class="name">Leno</div><div class="preview">به پیام‌رسان Leno خوش آمدی!</div></div><div class="time">اکنون</div></div>
+<div class="chat" data-type="personal" data-name="یادداشت‌های من" onclick="openChat('یادداشت‌های من','📝')"><div class="avatar">📝</div><div class="info"><div class="name">یادداشت‌های من</div><div class="preview">پیام‌های شخصی خودت را اینجا بنویس</div></div></div>
+<div class="chat" data-type="groups" data-name="گروه من" onclick="openChat('گروه من','👥')"><div class="avatar">👥</div><div class="info"><div class="name">گروه من</div><div class="preview">فضایی برای گفتگوهای گروهی</div></div></div>
+</main>
+<nav class="bottom"><button class="active" onclick="showSection('chats',this)">✉️<br>گفتگوها</button><button onclick="showSection('contacts',this)">👥<br>مخاطبین</button><button onclick="showSection('profile',this)">👤<br>پروفایل</button><button onclick="showSection('settings',this)">⚙️<br>تنظیمات</button></nav>
+<section id="chatPage"><div class="chathead"><button class="back" onclick="closeChat()">‹</button><div class="avatar" id="chatAvatar">L</div><div><div id="chatTitle">Leno</div><div class="subtitle">گفتگوی محلی</div></div></div><div id="history"></div><div class="composer"><input id="message" placeholder="پیامت رو بنویس..." onkeydown="if(event.key==='Enter')sendMessage()"><button onclick="sendMessage()">➤</button></div></section>
+<script>
+let current='',tab='all';
+const saved=JSON.parse(localStorage.getItem('leno_messages')||'{}');
+function openChat(name,avatar){current=name;document.getElementById('chatTitle').textContent=name;document.getElementById('chatAvatar').textContent=avatar;document.getElementById('chatPage').style.display='flex';renderMessages()}
+function closeChat(){document.getElementById('chatPage').style.display='none'}
+function renderMessages(){let h=document.getElementById('history');h.innerHTML='';(saved[current]||[]).forEach(m=>{let d=document.createElement('div');d.className='bubble';d.textContent=m;h.appendChild(d)});h.scrollTop=h.scrollHeight}
+function sendMessage(){let i=document.getElementById('message'),m=i.value.trim();if(!m)return;(saved[current]??=[]).push(m);localStorage.setItem('leno_messages',JSON.stringify(saved));i.value='';renderMessages()}
+function setTab(el,t){tab=t;document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));el.classList.add('active');filterChats()}
+function filterChats(){let q=document.getElementById('search').value.toLowerCase();document.querySelectorAll('.chat').forEach(c=>c.style.display=(c.dataset.name.toLowerCase().includes(q)&&(tab==='all'||c.dataset.type===tab))?'flex':'none')}
+function showSection(s,el){document.querySelectorAll('.bottom button').forEach(b=>b.classList.remove('active'));el.classList.add('active');if(s==='chats'){document.getElementById('chats').style.display='block';document.querySelector('.search').style.display='block';document.querySelector('.tabs').style.display='flex';return}document.getElementById('chats').style.display='none';document.querySelector('.search').style.display='none';document.querySelector('.tabs').style.display='none';let titles={contacts:'مخاطبین',profile:'پروفایل',settings:'تنظیمات'};document.getElementById('chats').innerHTML='<div style="padding:28px;text-align:center"><div style="font-size:42px">✦</div><h3>'+titles[s]+'</h3><p style="color:#91a1b2;font-size:13px">این بخش در نسخه‌های بعدی تکمیل می‌شود.</p></div>'}
+</script>
+</body>
+</html>

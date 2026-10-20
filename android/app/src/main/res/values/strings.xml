@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Leno</string>
+    <string name="title_activity_main">Leno</string>
+    <string name="package_name">com.leno.app</string>
+    <string name="custom_url_scheme">com.leno.app</string>
+</resources>
