@@ -9,7 +9,21 @@
 *{box-sizing:border-box}
 body{margin:0;background:#0e1621;color:#fff;font-family:Tahoma,Arial,sans-serif}
 header{height:65px;background:#17212b;display:flex;align-items:center;padding:0 18px;gap:13px}
-.logo{width:43px;height:43px;border-radius:50%;background:#6c5ce7;display:grid;place-items:center;font-size:25px;font-weight:bold}
+.logo{
+width:43px;
+height:43px;
+border-radius:14px;
+background:linear-gradient(90deg,#08090d 0%,#08090d 50%,#ffffff 50%,#ffffff 100%);
+display:grid;
+place-items:center;
+font-size:29px;
+font-weight:900;
+font-family:Arial,sans-serif;
+color:#172bba;
+text-shadow:0 0 3px #8c68ff,0 0 8px #7255ff,0 0 13px rgba(114,85,255,.65);
+box-shadow:0 0 8px rgba(90,70,220,.25);
+border:1px solid rgba(130,110,255,.6);
+}
 .brand{font-size:22px;font-weight:bold}
 .subtitle{font-size:11px;color:#8d9eaf;margin-top:5px}
 .search{padding:12px;background:#17212b}
@@ -56,7 +70,7 @@ function renderMessages(){let h=document.getElementById('history');h.innerHTML='
 function sendMessage(){let i=document.getElementById('message'),m=i.value.trim();if(!m)return;(saved[current]??=[]).push(m);localStorage.setItem('leno_messages',JSON.stringify(saved));i.value='';renderMessages()}
 function setTab(el,t){tab=t;document.querySelectorAll('.tabs button').forEach(b=>b.classList.remove('active'));el.classList.add('active');filterChats()}
 function filterChats(){let q=document.getElementById('search').value.toLowerCase();document.querySelectorAll('.chat').forEach(c=>c.style.display=(c.dataset.name.toLowerCase().includes(q)&&(tab==='all'||c.dataset.type===tab))?'flex':'none')}
-function showSection(s,el){document.querySelectorAll('.bottom button').forEach(b=>b.classList.remove('active'));el.classList.add('active');if(s==='chats'){document.getElementById('chats').style.display='block';document.querySelector('.search').style.display='block';document.querySelector('.tabs').style.display='flex';return}document.getElementById('chats').style.display='none';document.querySelector('.search').style.display='none';document.querySelector('.tabs').style.display='none';let titles={contacts:'مخاطبین',profile:'پروفایل',settings:'تنظیمات'};document.getElementById('chats').innerHTML='<div style="padding:28px;text-align:center"><div style="font-size:42px">✦</div><h3>'+titles[s]+'</h3><p style="color:#91a1b2;font-size:13px">این بخش در نسخه‌های بعدی تکمیل می‌شود.</p></div>'}
+function showSection(s,el){document.querySelectorAll('.bottom button').forEach(b=>b.classList.remove('active'));el.classList.add('active');if(s==='chats'){document.getElementById('chats').style.display='block';document.querySelector('.search').style.display='block';document.querySelector('.tabs').style.display='flex';return}document.getElementById('chats').style.display='none';document.querySelector('.search').style.display='none';document.querySelector('.tabs').style.display='none';let titles={contacts:'مخاطبین',profile:'پروفایل',settings:'تنظیمات'};let content={contacts:'<div class="chat" onclick="openChat(\'یادداشت‌های من\',\'📝\')"><div class="avatar">📝</div><div class="info"><div class="name">یادداشت‌های من</div><div class="preview">یادداشت‌ها و پیام‌های شخصی</div></div></div><div style="padding:18px;color:#91a1b2;font-size:12px;text-align:center">مخاطبین واقعی بعد از راه‌اندازی حساب کاربری اضافه می‌شوند.</div>',profile:'<div style="padding:30px 20px;text-align:center"><div class="avatar" style="width:86px;height:86px;margin:auto;font-size:34px">👤</div><h3>پروفایل من</h3><p style="color:#91a1b2;font-size:13px">حساب کاربری Leno هنوز ساخته نشده است.</p></div>',settings:'<div style="padding:20px"><h3>تنظیمات</h3><div class="chat"><div class="info"><div class="name">ظاهر برنامه</div><div class="preview">تم تیره Leno</div></div></div><div class="chat"><div class="info"><div class="name">اعلان‌ها</div><div class="preview">پس از راه‌اندازی بک‌اند فعال می‌شوند</div></div></div><div class="chat"><div class="info"><div class="name">دربارهٔ Leno</div><div class="preview">نسخهٔ آزمایشی پیام‌رسان</div></div></div></div>'};document.getElementById('chats').innerHTML=content[s]||''}
 </script>
 </body>
 </html>
